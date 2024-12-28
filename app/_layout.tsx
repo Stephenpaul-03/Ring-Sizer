@@ -9,17 +9,24 @@ import {
   Modal,
   Linking,
   StatusBar,
+  Platform,
 } from "react-native";
 import Slider from "@react-native-community/slider";
 import Svg, { Circle } from "react-native-svg";
+import { setBackgroundColorAsync, setButtonStyleAsync } from "expo-navigation-bar";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const App = () => {
-  const [sliderValue, setSliderValue] = useState(18.5); 
-  const [isModalVisible, setIsModalVisible] = useState(true); 
-  const animatedValue = useRef(new Animated.Value(18.5)).current; 
-
+  const [sliderValue, setSliderValue] = useState(18.5);
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const animatedValue = useRef(new Animated.Value(18.5)).current;
+  useEffect(() => {
+    if (Platform.OS === "android") {
+      setBackgroundColorAsync("#f4f4f4");
+      setButtonStyleAsync("dark"); 
+    }
+  }, []);
   const ringSizes = [
     { us: 3,    uk: "E",    eu: 44, jpn:4,     diameter: 14.0, circumference: 44 },
     { us: 3.25, uk: "F",    eu: 45, jpn:5.25,  diameter: 14.4, circumference: 45 },
@@ -81,6 +88,7 @@ const App = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />
       <Modal
         visible={isModalVisible}
         animationType="fade"
@@ -99,7 +107,6 @@ const App = () => {
           </View>
         </View>
       </Modal>
-      <StatusBar barStyle="dark-content" backgroundColor="#f4f4f4" />
       <View style={styles.topSection}>
         <Svg height="200" width="200" style={styles.svgContainer}>
           <AnimatedCircle
